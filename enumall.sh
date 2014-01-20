@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Subdomain enumeration script that creates/uses a dynamic resource script for recon-ng.
+# only 1 module needs api’s (/api/google_site) find instructions for that on the wiki.
+# Or you can comment out that module.
+# uses google scraping, bing scraping, baidu scraping, netcraft, and bruteforces.
+# by @jhaddix
+
+# input from command-line becomes domain to test
+domain=$1
+
+#timestamp
+stamp=$(date -d "today" +"%Y%m%d%H%M")
+
+#create rc file with workspace.timestamp and start enumerating hosts
+touch $domain$stamp.resource
+
+echo "workspace $domain$stamp" >> $domain$stamp.resource
+echo "set domain $domain"  >> $domain$stamp.resource
+echo "use recon/hosts/gather/http/web/baidu_site" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use recon/hosts/gather/http/web/bing_domain" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use recon/hosts/gather/http/web/google_site" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use recon/hosts/gather/http/web/netcraft" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use recon/hosts/gather/http/web/yahoo_site" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use recon/hosts/gather/http/api/google_site" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use recon/hosts/gather/dns/brute_force" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+echo "use dns/resolve" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
+sleep 1
+
+# python was giving some weird errors when trying to call python /opt/recon-ng/recon-ng so this workaround worked.
+
+path=$(pwd)
+cd /opt/recon-ng
+./recon-ng --no-check -r $path/$domain$stamp.resource
+
+# now just run "show hosts" or use a report module in recon-ng prompt
