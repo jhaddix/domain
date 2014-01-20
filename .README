@@ -1,0 +1,5 @@
+Script to enumerate subdomains, leveraging recon-ng:
+ 
+Usage:
+
+./enumall.sh google.com
