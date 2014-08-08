@@ -9,29 +9,40 @@
 # input from command-line becomes domain to test
 domain=$1
 
+#run as bash enumall.sh paypal.com
+
 #timestamp
-stamp=$(date -d "today" +"%Y%m%d%H%M")
+stamp=$(date +"%m_%d_%Y")
 
 #create rc file with workspace.timestamp and start enumerating hosts
 touch $domain$stamp.resource
 
-echo "workspace $domain$stamp" >> $domain$stamp.resource
-echo "set domain $domain"  >> $domain$stamp.resource
-echo "use recon/hosts/gather/http/web/baidu_site" >> $domain$stamp.resource
+echo $domain
+
+echo "workspaces select $domain$stamp" >> $domain$stamp.resource
+echo "use recon/domains-hosts/baidu_site" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/http/web/bing_domain" >> $domain$stamp.resource
+echo "use recon/domains-hosts/bing_domain_web" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/http/web/google_site" >> $domain$stamp.resource
+echo "use recon/domains-hosts/google_site_web" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/http/web/netcraft" >> $domain$stamp.resource
+echo "use recon/domains-hosts/netcraft" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/http/web/yahoo_site" >> $domain$stamp.resource
+echo "use recon/domains-hosts/yahoo_site" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/http/api/google_site" >> $domain$stamp.resource
+echo "use recon/domains-hosts/google_site_api" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/dns/brute_force" >> $domain$stamp.resource
+echo "use recon/domains-hosts/brute_hosts" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use dns/resolve" >> $domain$stamp.resource
+echo "use recon/hosts-hosts/resolve" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 sleep 1
 
