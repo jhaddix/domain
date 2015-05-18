@@ -11,3 +11,9 @@ This is my version of a script that dynamically creates a resource file for a do
 TLDR; I just want to do my subdomain discovery via ONE command and be done with it.
 
 Some fast BASH-fu will do nicely here!
+
+# Subdomain enumeration script that creates/uses a dynamic resource script for recon-ng.
+# only 1 module needs api’s (/api/google_site) find instructions for that on the wiki.
+# Or you can comment out that module.
+# uses google scraping, bing scraping, baidu scraping, yahoo scarping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.
+# by @jhaddix
