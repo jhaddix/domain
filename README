@@ -1,8 +1,11 @@
-Script to enumerate subdomains, leveraging recon-ng:
+Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing scraping, baidu scraping, yahoo scarping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.:
  
 Usage:
 
 ./enumall.sh google.com
+
+
+Info:
 
 Recon-ng is awesome. Recon-ng supports the use of resource scripts to automate the console. While having a resource script template for recon-ng is nice, it's cumbersome to have to change the template and domain constantly, or do it from the CLI.
 
@@ -10,10 +13,6 @@ This is my version of a script that dynamically creates a resource file for a do
 
 TLDR; I just want to do my subdomain discovery via ONE command and be done with it.
 
-Some fast BASH-fu will do nicely here!
+Only 1 module needs an api key (/api/google_site) find instructions for that on the recon-ng wiki.
 
-# Subdomain enumeration script that creates/uses a dynamic resource script for recon-ng.
-# only 1 module needs api’s (/api/google_site) find instructions for that on the wiki.
-# Or you can comment out that module.
-# uses google scraping, bing scraping, baidu scraping, yahoo scarping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.
-# by @jhaddix
+by @jhaddix
