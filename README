@@ -15,4 +15,6 @@ TLDR; I just want to do my subdomain discovery via ONE command and be done with 
 
 Only 1 module needs an api key (/api/google_site) find instructions for that on the recon-ng wiki.
 
+MOAR INFO @ http://www.securityaegis.com/recon-ng-creating-a-dynamic-resource-script-for-subdomain-discovery/
+
 by @jhaddix
