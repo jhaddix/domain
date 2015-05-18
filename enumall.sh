@@ -44,6 +44,9 @@ echo "run" >> $domain$stamp.resource
 echo "use recon/hosts/enum/dns/resolve" >> $domain$stamp.resource
 echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
+echo "use reporting/csv" >> $domain$stamp.resource
+echo "set FILENAME $domain.csv" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
 sleep 1
 
 # python was giving some weird errors when trying to call python /opt/recon-ng/recon-ng so this workaround worked.
