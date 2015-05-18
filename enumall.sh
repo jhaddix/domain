@@ -49,7 +49,7 @@ sleep 1
 # python was giving some weird errors when trying to call python /opt/recon-ng/recon-ng so this workaround worked.
 
 path=$(pwd)
-cd /opt/recon-ng
+cd /usr/share/recon-ng/
 ./recon-ng --no-check -r $path/$domain$stamp.resource
 
 # now just run "show hosts" or use a report module in recon-ng prompt
