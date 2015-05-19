@@ -13,6 +13,7 @@ domain=$1
 
 #timestamp
 stamp=$(date +"%m_%d_%Y")
+path=$(pwd)
 
 #create rc file with workspace.timestamp and start enumerating hosts
 touch $domain$stamp.resource
@@ -44,11 +45,13 @@ echo "run" >> $domain$stamp.resource
 echo "use recon/hosts/enum/dns/resolve" >> $domain$stamp.resource
 echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
+echo "use reporting/csv" >> $domain$stamp.resource
+echo "set FILENAME $path/$domain.csv" >> $domain$stamp.resource
+echo "run" >> $domain$stamp.resource
 sleep 1
 
 # python was giving some weird errors when trying to call python /opt/recon-ng/recon-ng so this workaround worked.
 
-path=$(pwd)
 cd /usr/share/recon-ng/
 ./recon-ng --no-check -r $path/$domain$stamp.resource
 
