@@ -5,54 +5,86 @@
 # Or you can comment out that module.
 # uses google scraping, bing scraping, baidu scraping, netcraft, and bruteforces to find subdomains.
 # by @jhaddix
-
+# contributions: @reapzor
 # input from command-line becomes domain to test
-domain=$1
+DOMAINS=()
+STAMP=$(date +"%m_%Y")
+CURRENT_PATH=$(pwd)
+MODULES=(
+"recon/domains-domains/brute_suffix"
+"recon/domains-hosts/brute_hosts"
+"recon/domains-hosts/baidu_site"
+"recon/domains-hosts/bing_domain_web"
+"recon/domains-hosts/google_site_api"
+"recon/domains-hosts/yahoo_domain"
+"recon/domains-hosts/shodan_hostname"
+"recon/domains-hosts/ssl_san"
+"recon/domains-hosts/vpnhunter"
+"recon/hosts-hosts/bing_ip"
+"recon/hosts-hosts/freegeoip"
+"recon/hosts-hosts/resolve"
+"recon/hosts-hosts/reverse_resolve"
+"recon/domains-vulnerabilities/punkspider"
+)
+#------------------------------------------------------------------------------------------------
+if [ $# -eq 0 ]
+  then
+    echo "enumall.sh -n <name> domain [domain2 domain3 ...]"
+    exit 1
+fi
 
-#run as bash enumall.sh paypal.com
+while [[ $# > 0 ]]
+do
+KEY="$1"
 
-#timestamp
-stamp=$(date +"%m_%d_%Y")
-path=$(pwd)
+case $KEY in
+    -n|--name)
+    NAME="$2"
+    shift # begone argument!
+    ;;
+
+    *)
+    DOMAINS+=($KEY) 
+          #no predefined parameter, so assuming it's a domain 
+    ;;
+esac
+
+shift #onto the next!
+
+done
+
+if [ -z "$NAME" ]
+ then
+    echo "no name, no game"
+    exit 1
+fi
+echo "Initializing recon-ng with folowing parameters:"
+echo "Workspace name: $NAME"
+echo "Current Path: $PATH"
+echo "Timestamp: $STAMP"
+echo "Domains: ${DOMAINS[@]}"
+echo "Modules: ${MODULES[@]}"
 
 #create rc file with workspace.timestamp and start enumerating hosts
-touch $domain$stamp.resource
+touch $NAME_$STAMP.resource
 
-echo $domain
+echo "workspaces select $NAME" > $NAME_$STAMP.resource #first one cleans up if there was already a resource file
 
-echo "workspaces select $domain$stamp" >> $domain$stamp.resource
-echo "use recon/domains-hosts/baidu_site" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/domains-hosts/bing_domain_web" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/domains-hosts/google_site_web" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/domains-hosts/netcraft" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/domains-hosts/yahoo_site" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/domains-hosts/google_site_api" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/gather/dns/brute_hosts" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use recon/hosts/enum/dns/resolve" >> $domain$stamp.resource
-echo "set SOURCE $domain" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
-echo "use reporting/csv" >> $domain$stamp.resource
-echo "set FILENAME $path/$domain.csv" >> $domain$stamp.resource
-echo "run" >> $domain$stamp.resource
+for DOMAIN in "${DOMAINS[@]}"
+do
+    echo "add domains $DOMAIN" >> $NAME_$STAMP.resource
+done
+
+for MODULE in "${MODULES[@]}"
+do
+    echo "use $MODULE" >> $NAME_$STAMP.resource
+    echo "run" >> $NAME_$STAMP.resource
+done
+
 sleep 1
-
 # python was giving some weird errors when trying to call python /opt/recon-ng/recon-ng so this workaround worked.
 
 cd /usr/share/recon-ng/
-./recon-ng --no-check -r $path/$domain$stamp.resource
+./recon-ng --no-check -r $CURRENT_PATH/$NAME_$STAMP.resource
 
 # now just run "show hosts" or use a report module in recon-ng prompt
