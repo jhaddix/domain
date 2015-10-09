@@ -33,7 +33,7 @@ echo "run" >> $domain$stamp.resource
 echo "use recon/domains-hosts/netcraft" >> $domain$stamp.resource
 echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
-echo "use recon/domains-hosts/yahoo_site" >> $domain$stamp.resource
+echo "use recon/domains-hosts/yahoo_domain" >> $domain$stamp.resource
 echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 echo "use recon/domains-hosts/google_site_api" >> $domain$stamp.resource
