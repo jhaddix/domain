@@ -3,11 +3,12 @@
 # Subdomain enumeration script that creates/uses a dynamic resource script for recon-ng.
 # The google site api mobule requires a API key (/api/google_site) to enter that you can find instructions for that on the recon-ng wiki.
 # Or you can comment out that module. The Shodan module requires an API key as well, same deal. 
-# Enumall.sh uses google scraping, bing scraping, baidu scraping, netcraft, and bruteforces.
-# i use a custome DNS bruteforce list from the seclists project (combines Knock, firece, recon-ng lists) located here: 
+#
+# Enumall.sh uses google scraping, bing scraping, baidu scraping, netcraft, and bruteforces for DNS subdomains.
+# I use a custome DNS bruteforce list from the seclists project (combines Knock, firece, recon-ng lists, ++) located here: 
 # https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt
-# that file needs to be dropped in /usr/share/recon-ng/data/
-# eunmall iw written by @jhaddix
+# That file needs to be dropped in /usr/share/recon-ng/data/
+# enumall.sh iw written by @jhaddix
 
 # input from command-line becomes domain to test
 domain=$1
