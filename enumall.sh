@@ -68,7 +68,7 @@ echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 echo ""
 echo "use recon/hosts-hosts/resolve" >> $domain$stamp.resource
-echo "set SOURCE default" >> $domain$stamp.resource
+echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 echo ""
 echo "use reporting/csv" >> $domain$stamp.resource
