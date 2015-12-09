@@ -11,7 +11,6 @@ DOMAINS=()
 STAMP=$(date +"%m_%Y")
 CURRENT_PATH=$(pwd)
 MODULES=(
-"recon/domains-domains/brute_suffix"
 "recon/domains-hosts/brute_hosts"
 "recon/domains-hosts/baidu_site"
 "recon/domains-hosts/bing_domain_web"
@@ -25,6 +24,8 @@ MODULES=(
 "recon/hosts-hosts/resolve"
 "recon/hosts-hosts/reverse_resolve"
 "recon/domains-vulnerabilities/punkspider"
+"recon/domains-contacts/pgp_search"
+"recon/domains-contacts/salesmaple"
 )
 #------------------------------------------------------------------------------------------------
 if [ $# -eq 0 ]
