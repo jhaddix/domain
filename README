@@ -2,13 +2,13 @@ Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing 
  
 Usage:
 
-Install recon-ng:
+Install recon-ng
 
 git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git
 cd recon-ng
 ./recon-ng.py
 
-eventually link the installation directory to /usr/share/recon-ng (ln -s)
+eventually link the installation directory to /usr/share/recon-ng (ln -s /$recon-ng_path /usr/share/recon-ng)
 
 './enumall.sh google.com'
 
