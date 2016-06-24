@@ -72,11 +72,11 @@ echo "set SOURCE $domain" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 echo ""
 echo "use reporting/csv" >> $domain$stamp.resource
-echo "set FILENAME /root/Desktop/$domain$stamp.csv" >> $domain$stamp.resource
+echo "set FILENAME ./$domain$stamp.csv" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 echo ""
 echo "use reporting/list" >> $domain$stamp.resource
-echo "set FILENAME /root/Desktop/$domain$stamp.lst" >> $domain$stamp.resource
+echo "set FILENAME ./$domain$stamp.lst" >> $domain$stamp.resource
 echo "set COLUMN host" >> $domain$stamp.resource
 echo "run" >> $domain$stamp.resource
 echo ""
