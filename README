@@ -4,9 +4,13 @@ Usage:
 
 Install recon-ng
 
-git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git
-cd recon-ng
-./recon-ng.py
+Installation from Source
+Clone the Recon-ng repository.
+'git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git
+Change into the Recon-ng directory.
+'cd recon-ng
+Install dependencies.
+'pip install -r REQUIREMENTS
 
 eventually link the installation directory to /usr/share/recon-ng (ln -s /$recon-ng_path /usr/share/recon-ng)
 
