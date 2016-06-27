@@ -1,5 +1,21 @@
 Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing scraping, baidu scraping, yahoo scarping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.:
  
+Pre-Requisites:
+
+Installation recon-ng from Source
+
+1) Clone the Recon-ng repository.
+  
+  'git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git
+  
+2) Change into the Recon-ng directory.
+  'cd recon-ng
+  
+3) Install dependencies.
+  'pip install -r REQUIREMENTS
+
+4) Eventually link the installation directory to /usr/share/recon-ng (ln -s /$recon-ng_path /usr/share/recon-ng)
+
 Usage:
 
 './enumall.sh google.com'
