@@ -36,7 +36,11 @@ Installation recon-ng from Source
 
 `./enumall.py domain.com`
 
-also supports:-w to run a custom wordlist with recon-ng-a to use alt-dns-p to feed a custom permutations list to alt-dns (requires -a flag)-i to feed a list of domains (can also type extra domains into the original command)
+also supports:
++ -w to run a custom wordlist with recon-ng
++ -a to use alt-dns
++ -p to feed a custom permutations list to alt-dns (requires -a flag)
++ -i to feed a list of domains (can also type extra domains into the original command)
 
 # Advanced Usage
 
