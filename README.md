@@ -1,6 +1,14 @@
+# Info:
+
+Recon-ng and Alt-DNS are awesome. This script combines the power of these tools with the ability to run multiple domains within the same session.
+
+TLDR; I just want to do my subdomain discovery via ONE command and be done with it.
+
+Only 1 module needs an api key (/api/google_site) find instructions for that on the recon-ng wiki.
+
 Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing scraping, baidu scraping, yahoo scarping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.
 
-Pre-Requisites:
+# Pre-Requisites:
 
 Installation recon-ng from Source
 
@@ -24,24 +32,17 @@ Installation recon-ng from Source
     + Alt-DNS (https://github.com/infosec-au/altdns)
     + and a good subdomain bruteforce list (https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt)
 
-Basic Usage:
+# Basic Usage:
 
 `./enumall.py domain.com`
 
 also supports:-w to run a custom wordlist with recon-ng-a to use alt-dns-p to feed a custom permutations list to alt-dns (requires -a flag)-i to feed a list of domains (can also type extra domains into the original command)
 
-Advanced Usage:
+# Advanced Usage:
 
 `./enumall.py domain1.com domain2.com domain3.com -i domainlist.txt -a -p permutationslist.txt -w wordlist.com`
 
-Output from recon-ng will be in .lst and .csv files, output from alt-dns will be in a .txt file
+Output from recon-ng will be in `.lst` and `.csv` files, output from alt-dns will be in a `.txt` file
 
-Info:
-
-Recon-ng and Alt-DNS are awesome. This script combines the power of these tools with the ability to run multiple domains within the same session.
-
-TLDR; I just want to do my subdomain discovery via ONE command and be done with it.
-
-Only 1 module needs an api key (/api/google_site) find instructions for that on the recon-ng wiki.
 
 by @jhaddix and @leifdreizler
