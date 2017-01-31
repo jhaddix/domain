@@ -48,11 +48,13 @@ def run_recon(domains, bruteforce):
 		for module in module_list:
 	    		run_module(reconb, module, domain)
 	
-	#subdomain bruteforcing
-	if bruteforce:
+		#subdomain bruteforcing
 		x = reconb.do_load("recon/domains-hosts/brute_hosts")
-		x.do_set("WORDLIST /usr/share/recon-ng/data/banner.txt")
-		x.do_set("SOURCE bugcrowd.com")
+		if bruteforce:
+			x.do_set("WORDLIST " + bruteforce)
+		else:
+			x.do_set("WORDLIST /usr/share/recon-ng/data/hostnames.txt")
+		x.do_set("SOURCE " + domain)
 		x.do_run(None)
 	
 	#reporting output
