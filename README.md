@@ -6,7 +6,7 @@ TLDR; I just want to do my subdomain discovery via ONE command and be done with 
 
 Only 1 module needs an api key (/api/google_site) find instructions for that on the recon-ng wiki.
 
-Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing scraping, baidu scraping, yahoo scarping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.
+Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing scraping, baidu scraping, yahoo scraping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.
 
 # Pre-Requisites
 
