@@ -18,9 +18,11 @@ import datetime
 import time
 import os
 import sys
-
-reconPath = "/usr/share/recon-ng/"
-altDnsPath = "/root/Desktop/altdns-master/"
+try:
+	from config import *
+except:
+	reconPath = "/usr/share/recon-ng/"
+	altDnsPath = "/root/Desktop/altdns-master/"
 
 sys.path.insert(0,reconPath)
 from recon.core import base
@@ -29,10 +31,11 @@ from recon.core.framework import Colors
 if altDnsPath:
 	sys.path.insert(1, altDnsPath)
 
+
 def run_module(reconBase, module, domain):
-    x = reconBase.do_load(module)
-    x.do_set("SOURCE " + domain)
-    x.do_run(None)
+	x = reconBase.do_load(module)
+	x.do_set("SOURCE " + domain)
+	x.do_run(None)
 
 
 def run_recon(domains, bruteforce):
@@ -46,7 +49,7 @@ def run_recon(domains, bruteforce):
 	
 	for domain in domains:
 		for module in module_list:
-	    		run_module(reconb, module, domain)
+				run_module(reconb, module, domain)
 	
 		#subdomain bruteforcing
 		x = reconb.do_load("recon/domains-hosts/brute_hosts")

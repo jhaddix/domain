@@ -1,0 +1,6 @@
+.idea
+config.py
+virtualenv
+.env
+venv/
+ENV/
