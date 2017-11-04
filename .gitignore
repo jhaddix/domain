@@ -7,3 +7,4 @@ ENV/
 *.csv
 *.txt
 *.lst
+data_output
