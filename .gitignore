@@ -4,3 +4,6 @@ virtualenv
 .env
 venv/
 ENV/
+*.csv
+*.txt
+*.lst
