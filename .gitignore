@@ -1,0 +1,10 @@
+.idea
+config.py
+virtualenv
+.env
+venv/
+ENV/
+*.csv
+*.txt
+*.lst
+data_output
