@@ -73,6 +73,7 @@ def run_recon(domains, bruteforce):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-a', dest='runAltDns', action='store_true', help="After recon, run AltDNS? (this requires alt-dns)")
+parser.add_argument('-at', dest='threadsAltDns', type=int, help="alt-dns number of threads (this requires alt-dns)", default='10')
 parser.add_argument("-i", dest="filename", type=argparse.FileType('r'), help="input file of domains (one per line)", default=None)
 parser.add_argument("domains", help="one or more domains", nargs="*", default=None)
 parser.add_argument("-w", dest="wordlist", type=argparse.FileType('r'), help="input file of subdomain wordlist. must be in same directory as this file, or give full path", default=None)
@@ -103,6 +104,7 @@ if args.runAltDns:
 	subdomains = os.path.join(os.getcwd(), workspace+".lst")
 	permList = args.permlist.name if args.permlist else os.path.join(altDnsPath,"words.txt")
 	output = os.path.join(os.getcwd(),workspace+"_output.txt")
+	threads = args.threadsAltDns if args.threadsAltDns else "10"
 	print "running alt-dns... please be patient :) results will be displayed in "+output
 	# python altdns.py -i subdomainsList -o data_output -w permutationsList -r -s results_output.txt
-	os.system('%s -i %s -o data_output -w %s -r -s %s' % (altCmd, subdomains, permList,output))
+	os.system('%s -i %s -o data_output -w %s -r -s %s -t %s' % (altCmd, subdomains, permList, output, threads))
