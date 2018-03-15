@@ -32,6 +32,8 @@ Installation recon-ng from Source
     + Alt-DNS (https://github.com/infosec-au/altdns)
     + and a good subdomain bruteforce list (https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt)
 
+6. Create config.py file and specify the path to recon-ng and allDNS as it showed in config_sample.py
+
 # Basic Usage
 
 `./enumall.py domain.com`
