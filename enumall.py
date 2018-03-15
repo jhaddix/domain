@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # enumall is a refactor of enumall.sh providing a script to identify subdomains using several techniques and tools.
 # Relying heavily on the stellar Recon-NG framework and Alt-DNS, enumall will identify subdomains via search engine
@@ -6,7 +6,7 @@
 # concatenated subdomains (altDNS), and brute-forces with a stellar subdomain list (formed from Bitquark's subdomain
 # research, Seclists, Knock, Fierce, Recon-NG, and more) located here:
 # https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt
-# 
+#
 # Alt-DNS Download: https://github.com/infosec-au/altdns
 #
 # by @jhaddix and @leifdreizler
@@ -46,11 +46,11 @@ def run_recon(domains, bruteforce):
 	reconb.init_workspace(wspace)
 	reconb.onecmd("TIMEOUT=100")
 	module_list = ["recon/domains-hosts/bing_domain_web", "recon/domains-hosts/google_site_web", "recon/domains-hosts/netcraft", "recon/domains-hosts/shodan_hostname", "recon/netblocks-companies/whois_orgs", "recon/hosts-hosts/resolve"]
-	
+
 	for domain in domains:
 		for module in module_list:
-				run_module(reconb, module, domain)
-	
+			run_module(reconb, module, domain)
+
 		#subdomain bruteforcing
 		x = reconb.do_load("recon/domains-hosts/brute_hosts")
 		if bruteforce:
@@ -59,7 +59,7 @@ def run_recon(domains, bruteforce):
 			x.do_set("WORDLIST /usr/share/recon-ng/data/hostnames.txt")
 		x.do_set("SOURCE " + domain)
 		x.do_run(None)
-	
+
 	#reporting output
 	outFile = "FILENAME "+os.getcwd()+"/"+domains[0]
 	x = reconb.do_load("reporting/csv")
@@ -93,7 +93,7 @@ if args.filename:
 	lines = [line.rstrip('\n') for line in lines]
 	domainList+=lines
 
-bruteforceList = args.wordlist.name if args.wordlist else ""	
+bruteforceList = args.wordlist.name if args.wordlist else ""
 
 run_recon(domainList, bruteforceList)
 
