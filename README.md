@@ -30,7 +30,7 @@ Installation recon-ng from Source
 5. Optionally (highly recommended) download: 
 
     + Alt-DNS (https://github.com/infosec-au/altdns)
-    + and a good subdomain bruteforce list (https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt)
+    + and a good subdomain bruteforce list (https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sortedcombied-knock-dnsrecon-fierce-reconng.txt)
 
 6. Create config.py file and specify the path to recon-ng and allDNS as it showed in config_sample.py
 
