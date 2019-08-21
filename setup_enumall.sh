@@ -25,7 +25,7 @@ echo -e "[+] cloning git repos\n"
 git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git
 git clone https://github.com/infosec-au/altdns.git
 git clone https://github.com/jhaddix/domain.git
-wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt
+wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/sortedcombined-knock-dnsrecon-fierce-reconng.txt
 
 cd domain 
 pathSed=$(echo $path | sed s/'\/'/'\\\/'/g)
