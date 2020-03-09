@@ -80,7 +80,7 @@ parser.add_argument("-p", dest="permlist", type=argparse.FileType('r'), help="in
 args = parser.parse_args()
 
 if args.runAltDns and not altDnsPath:
-	print "Error: no altDns path specified, please download from: https://github.com/infosec-au/altdns"
+	print("Error: no altDns path specified, please download from: https://github.com/infosec-au/altdns")
 	exit(0)
 
 domainList = []
@@ -103,6 +103,6 @@ if args.runAltDns:
 	subdomains = os.path.join(os.getcwd(), workspace+".lst")
 	permList = args.permlist.name if args.permlist else os.path.join(altDnsPath,"words.txt")
 	output = os.path.join(os.getcwd(),workspace+"_output.txt")
-	print "running alt-dns... please be patient :) results will be displayed in "+output
+	print("running alt-dns... please be patient :) results will be displayed in "+output)
 	# python altdns.py -i subdomainsList -o data_output -w permutationsList -r -s results_output.txt
 	os.system('%s -i %s -o data_output -w %s -r -s %s' % (altCmd, subdomains, permList,output))
