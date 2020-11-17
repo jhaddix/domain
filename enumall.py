@@ -11,15 +11,19 @@ import sys
 
 def run_altdns(domains):
     """Run altDNS with the given args."""
-    for domain in domains:
-        altCmd = f"altdns"
-        subdomains = f"/output/subdomain/recon-ng-{domain}.out"
-        permList = f"/altdns/words.txt"
-        output = f"/output/subdomain/altdns-{domain}.out"
 
-        # python altdns.py -i subdomainsList -o data_output -w permutationsList -r -s results_output.txt
-        print("running alt-dns... please be patient :) results will be displayed in "+output)
-        os.system(f"{altCmd} -i {subdomains} -o data_output -w {permList} -r -s {output}")
+    altCmd = "altdns"
+    subdomains = "altdns.in.tmp"
+    permList = "words.txt"
+    output = "altdns.out"
+
+    with open(subdomains,"w") as f:
+        for domain in domains:
+            f.write(domain)
+
+    print("[+] Running alt-dns...")
+    # python altdns.py -i subdomainsList -o data_output -w permutationsList -r -s results_output.txt
+    os.system(f"{altCmd} -i {subdomains} -o data_output -w {permList} -r -s {output}")
     return
 
 def install_modules(reconBase, modules):
