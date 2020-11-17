@@ -1,10 +1,6 @@
-.idea
-config.py
-virtualenv
-.env
-venv/
-ENV/
-*.csv
-*.txt
-*.lst
+**/.venv
+**/recon-ng
+**/altdns
+VERSION
+recon
 data_output

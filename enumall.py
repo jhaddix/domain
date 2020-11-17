@@ -1,108 +1,120 @@
-#!/usr/bin/env python
-
-# enumall is a refactor of enumall.sh providing a script to identify subdomains using several techniques and tools.
-# Relying heavily on the stellar Recon-NG framework and Alt-DNS, enumall will identify subdomains via search engine
-# scraping (yahoo, google, bing, baidu), identify subdomains using common OSINT sites (shodan, netcraft), identify
-# concatenated subdomains (altDNS), and brute-forces with a stellar subdomain list (formed from Bitquark's subdomain
-# research, Seclists, Knock, Fierce, Recon-NG, and more) located here:
-# https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt
-#
-# Alt-DNS Download: https://github.com/infosec-au/altdns
-#
-# by @jhaddix and @leifdreizler
-
+#!/usr/bin/env python3
+# enumall
+#   Authored by: @jhaddix and @leifdreizler
+#   Updated 2020-11: @bynx
+from recon.core import base
+from multiprocessing import Pool
 import argparse
-import re
-import sys
 import datetime
-import time
 import os
 import sys
-try:
-	from config import *
-except:
-	reconPath = "/usr/share/recon-ng/"
-	altDnsPath = "/root/Desktop/altdns-master/"
 
-sys.path.insert(0,reconPath)
-from recon.core import base
-from recon.core.framework import Colors
+def run_altdns(domains):
+    """Run altDNS with the given args."""
 
-if altDnsPath:
-	sys.path.insert(1, altDnsPath)
+    altCmd = "altdns"
+    subdomains = "altdns.in.tmp"
+    permList = "words.txt"
+    output = "altdns.out"
 
+    with open(subdomains,"w") as f:
+        for domain in domains:
+            f.write(domain)
+
+    print("[+] Running alt-dns...")
+    # python altdns.py -i subdomainsList -o data_output -w permutationsList -r -s results_output.txt
+    os.system(f"{altCmd} -i {subdomains} -o data_output -w {permList} -r -s {output}")
+    return
+
+def install_modules(reconBase, modules):
+    """Install required modules via recon-ng marketplace."""
+    for module in modules:
+        reconBase._do_marketplace_install(module)
+    return
 
 def run_module(reconBase, module, domain):
-	x = reconBase.do_load(module)
-	x.do_set("SOURCE " + domain)
-	x.do_run(None)
+    """Run the passed module with options set."""
+    try:
+        m = reconBase._do_modules_load(module)
+        m.options['source'] = domain
+        m.do_run(None)
+    except Exception as e:
+        print(f"[-] Exception hit: {e}")
+        raise
+    return
 
+def run_recon(domains, bf_wordlist, is_altdns_set, out_file):
+    """Initialize recon-ng base class and run core of script."""
+    stamp = datetime.datetime.now().strftime('%M:%H-%m_%d_%Y')
+    wspace = domains[0]+stamp
 
-def run_recon(domains, bruteforce):
-	stamp = datetime.datetime.now().strftime('%M:%H-%m_%d_%Y')
-	wspace = domains[0]+stamp
+    reconb = base.Recon(base.Mode.CLI)
+    reconb.start(base.Mode.CLI)
+    reconb._init_workspace(wspace)
 
-	reconb = base.Recon(base.Mode.CLI)
-	reconb.init_workspace(wspace)
-	reconb.onecmd("TIMEOUT=100")
-	module_list = ["recon/domains-hosts/bing_domain_web", "recon/domains-hosts/google_site_web", "recon/domains-hosts/netcraft", "recon/domains-hosts/shodan_hostname", "recon/netblocks-companies/whois_orgs", "recon/hosts-hosts/resolve"]
+    report_module = "reporting/list"
+    bf_module = "recon/domains-hosts/brute_hosts"
+    module_list = ["recon/hosts-hosts/resolve", "recon/domains-hosts/bing_domain_web", "recon/domains-hosts/google_site_web",
+                   "recon/domains-hosts/shodan_hostname", "recon/netblocks-companies/whois_orgs", "recon/domains-hosts/netcraft"]
+    install_modules(reconb, module_list + [f"{bf_module}",f"{report_module}"])
 
-	for domain in domains:
-		for module in module_list:
-			run_module(reconb, module, domain)
+    pool = Pool()
+    procs = []
+    for domain in domains:
+        for module in module_list:
+            p = pool.apply_async(run_module, args=(reconb, module, domain))
+            procs.append(p)
 
-		#subdomain bruteforcing
-		x = reconb.do_load("recon/domains-hosts/brute_hosts")
-		if bruteforce:
-			x.do_set("WORDLIST " + bruteforce)
-		else:
-			x.do_set("WORDLIST /usr/share/recon-ng/data/hostnames.txt")
-		x.do_set("SOURCE " + domain)
-		x.do_run(None)
+        # subdomain bruteforcing if wordlist set
+        m = reconb._do_modules_load(bf_module)
+        m.options['wordlist'] = bf_wordlist
+        m.options['source'] = domain
+        m.do_run(None)
 
-	#reporting output
-	outFile = "FILENAME "+os.getcwd()+"/"+domains[0]
-	x = reconb.do_load("reporting/csv")
-	x.do_set(outFile+".csv")
-	x.do_run(None)
+        # Export results if output file given
+        if out_file:
+            m = reconb._do_modules_load(report_module)
+            m.options['filename'] = out_file
+            m.options['column'] = "host"
+            m.do_run(None)
 
-	x = reconb.do_load("reporting/list")
-	x.do_set(outFile+".lst")
-	x.do_set("COLUMN host")
-	x.do_run(None)
+    if is_altdns_set:
+        run_altdns(domains)
+    return
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-a', dest='runAltDns', action='store_true', help="After recon, run AltDNS? (this requires alt-dns)")
-parser.add_argument("-i", dest="filename", type=argparse.FileType('r'), help="input file of domains (one per line)", default=None)
-parser.add_argument("domains", help="one or more domains", nargs="*", default=None)
-parser.add_argument("-w", dest="wordlist", type=argparse.FileType('r'), help="input file of subdomain wordlist. must be in same directory as this file, or give full path", default=None)
-parser.add_argument("-p", dest="permlist", type=argparse.FileType('r'), help="input file of permutations for alt-dns. if none specified will use default list.", default=None)
-args = parser.parse_args()
+def main(argv):
+    domains = argv.domains
+    if argv.in_file:
+        try:
+            with argv.in_file as f:
+                domains += f.read()
+        except Exception as e:
+            print(f"[-] Exception hit: {e}")
 
-if args.runAltDns and not altDnsPath:
-	print "Error: no altDns path specified, please download from: https://github.com/infosec-au/altdns"
-	exit(0)
+    if not domains:
+        print("[-] No domain passed. Exiting...")
+        sys.exit(1)
+    run_recon(domains, argv.wordlist, argv.runAltDns, argv.out_file)
+    return
 
-domainList = []
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', dest='runAltDns', action='store_true',
+                         help="After recon, run AltDNS? (this requires alt-dns)")
 
-if args.domains:
-	domainList+=args.domains
+    parser.add_argument("-i", dest="in_file", type=argparse.FileType('r'),
+                         help="input file of domains (one per line)", default=None)
 
-if args.filename:
-	lines = args.filename.readlines()
-	lines = [line.rstrip('\n') for line in lines]
-	domainList+=lines
+    parser.add_argument("-o", dest="out_file", type=str,
+                         help="output file for recon-ng results. if none specified, results not exported.", default=None)
 
-bruteforceList = args.wordlist.name if args.wordlist else ""
+    parser.add_argument("domains", help="one or more domains", nargs="*", default=None)
 
-run_recon(domainList, bruteforceList)
+    parser.add_argument("-w", dest="wordlist", type=str,
+                         help="wordlist file for subdomain brute forcing. if none specified defaults to $RECON_HOME/data/hostnames.txt",
+                         default="words.txt")
 
-if args.runAltDns:
-	workspace = domainList[0]
-	altCmd="python "+os.path.join(altDnsPath,"altdns.py")
-	subdomains = os.path.join(os.getcwd(), workspace+".lst")
-	permList = args.permlist.name if args.permlist else os.path.join(altDnsPath,"words.txt")
-	output = os.path.join(os.getcwd(),workspace+"_output.txt")
-	print "running alt-dns... please be patient :) results will be displayed in "+output
-	# python altdns.py -i subdomainsList -o data_output -w permutationsList -r -s results_output.txt
-	os.system('%s -i %s -o data_output -w %s -r -s %s' % (altCmd, subdomains, permList,output))
+    parser.add_argument("-p", dest="permlist", type=argparse.FileType('r'),
+                         help="input file of permutations for alt-dns. if none specified will use default list.", default=None)
+
+    main(parser.parse_args())

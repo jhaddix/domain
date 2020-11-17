@@ -4,7 +4,7 @@ Recon-ng and Alt-DNS are awesome. This script combines the power of these tools 
 
 TLDR; I just want to do my subdomain discovery via ONE command and be done with it.
 
-Only 1 module needs an api key (/api/google_site) find instructions for that on the recon-ng wiki.
+Only 2 module needs api keys (`/api/google_site`, `/api/shodan`); find instructions for that on the recon-ng wiki.
 
 Script to enumerate subdomains, leveraging recon-ng. Uses google scraping, bing scraping, baidu scraping, yahoo scraping, netcraft, and bruteforces to find subdomains. Plus resolves to IP.
 
@@ -14,41 +14,60 @@ Installation recon-ng from Source
 
 1. Clone the Recon-ng repository
 
-    `git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git`
-2. Change into the Recon-ng directory.
+    `git clone https://github.com/lanmaster53/recon-ng`
+
+1. Change into the Recon-ng directory.
 
     `cd recon-ng`
 
-3. Install dependencies.
+1. Install dependencies in a virtual environment:
 
-    `pip install -r REQUIREMENTS`
+    ```python
+    python3 -m pip install --upgrade pip setuptools wheel
+    python3 -m pip install venv
+    python3 -m venv .venv
+  
+    source .venv/bin/activate
+    python3 -m pip install --upgrade pip setuptools wheel
+    python3 -m pip install -r REQUIREMENTS
+    ```
 
-4. Eventually link the installation directory to /usr/share/recon-ng
+1. Symlink the `recon` lib and recon-ng `VERSION` from our clone to this repository:
 
-    `ln -s /$recon-ng_path /usr/share/recon-ng`
+    ```python
+    ln -s /path/to/recon-ng/recon ./recon
+    ln -s /path/to/recon-ng/VERSION ./VERSION
+    ```
 
-5. Optionally (highly recommended) download: 
-
-    + Alt-DNS (https://github.com/infosec-au/altdns)
-    + and a good subdomain bruteforce list (https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt)
-
-6. Create config.py file and specify the path to recon-ng and allDNS as it showed in config_sample.py
-
-# Basic Usage
-
-`./enumall.py domain.com`
-
-also supports:
-+ -w to run a custom wordlist with recon-ng
-+ -a to use alt-dns
-+ -p to feed a custom permutations list to alt-dns (requires -a flag)
-+ -i to feed a list of domains (can also type extra domains into the original command)
-
-# Advanced Usage
-
-`./enumall.py domain1.com domain2.com domain3.com -i domainlist.txt -a -p permutationslist.txt -w wordlist.com`
-
-Output from recon-ng will be in `.lst` and `.csv` files, output from alt-dns will be in a `.txt` file
+1. Optionally (highly recommended) download: 
+    - [Alt-DNS][alt-dns] (`git clone https://github.com/infosec-au/altdns && python3 -m pip install altdns/`)
+    - and a good subdomain [bruteforce list][dns-wl] (`git clone https://github.com/danielmiessler/SecLists`)
 
 
-by @jhaddix and @leifdreizler
+[alt-dns]: https://github.com/infosec-au/altdns
+[dns-wl]: https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/sorted_knock_dnsrecon_fierce_recon-ng.txt
+
+# Usage
+
+```
+(.venv) ➜ ./enumall.py -h
+usage: enumall.py [-h] [-a] [-i IN_FILE] [-o OUT_FILE] [-w WORDLIST] [-p PERMLIST] [domains ...]
+
+positional arguments:
+  domains      one or more domains
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -a           After recon, run AltDNS? (this requires alt-dns)
+  -i IN_FILE   input file of domains (one per line)
+  -o OUT_FILE  output file for recon-ng results. if none specified, results not exported.
+  -w WORDLIST  wordlist file for subdomain brute forcing. if none specified defaults to $RECON_HOME/data/hostnames.txt
+  -p PERMLIST  input file of permutations for alt-dns. if none specified will use default list.
+
+```
+
+## Docker
+```
+docker build . -t domain:enumall
+docker run -v ${PWD}:/out domain:enumall [-h]
+```
