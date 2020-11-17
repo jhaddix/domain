@@ -50,8 +50,8 @@ Installation recon-ng from Source
 # Usage
 
 ```
-(.venv) ➜ ./ng-enum.py -h
-usage: ng-enum.py [-h] [-a] [-i IN_FILE] [-o OUT_FILE] [-w WORDLIST] [-p PERMLIST] [domains ...]
+(.venv) ➜ ./enumall.py -h
+usage: enumall.py [-h] [-a] [-i IN_FILE] [-o OUT_FILE] [-w WORDLIST] [-p PERMLIST] [domains ...]
 
 positional arguments:
   domains      one or more domains
